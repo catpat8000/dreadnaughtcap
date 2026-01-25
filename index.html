@@ -245,7 +245,7 @@
                     </div>
                 </div>
                 <div>
-                    <img src="https://fastly.picsum.photos/id/366/4000/3000.jpg?hmac=zphhHOH9ofToN2jNHd8z-nc98NrBd8y2okWXEXetLDg" alt="Machine learning strategy visualization" class="rounded-lg shadow-lg" loading="lazy">
+                    <img id="strategy-image" src="https://fastly.picsum.photos/id/366/4000/3000.jpg?hmac=zphhHOH9ofToN2jNHd8z-nc98NrBd8y2okWXEXetLDg" alt="Machine learning strategy visualization" class="rounded-lg shadow-lg" loading="lazy">
                 </div>
             </div>
         </div>
@@ -712,6 +712,15 @@
             if (contentData.performance_chart) {
                 chartUrl = contentData.performance_chart;
                 console.log('Chart URL set:', chartUrl);
+            }
+
+            // Handle strategy image
+            if (contentData.strategy_image) {
+                const strategyImage = document.getElementById('strategy-image');
+                if (strategyImage) {
+                    strategyImage.src = convertToDirectImageUrl(contentData.strategy_image);
+                    console.log('Strategy image set:', contentData.strategy_image);
+                }
             }
         }
 
