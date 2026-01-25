@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dreadnaught Capital | AI-Powered Derivatives Trading</title>
+    <meta name="description" content="Dreadnaught Capital leverages machine learning to trade leveraged derivatives, delivering superior returns in all market conditions.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#0f172a",
+                        secondary: "#1e293b",
+                        accent: "#6366f1",
+                        highlight: "#f59e0b"
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .performance-chart {
+            background: linear-gradient(90deg, #4f46e5 0%, #10b981 100%);
+            height: 4px;
+            border-radius: 2px;
+        }
+        .performance-card {
+            transition: all 0.3s ease;
+        }
+        .performance-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        /* Loading skeleton styles */
+        .skeleton {
+            background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: 4px;
+        }
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .skeleton-text {
+            height: 1em;
+            margin-bottom: 0.5em;
+        }
+        .skeleton-title {
+            height: 2em;
+            width: 60%;
+            margin-bottom: 1em;
+        }
+        .skeleton-card {
+            min-height: 200px;
+        }
+        /* Error state */
+        .error-banner {
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        /* Hide content until loaded */
+        .content-loading {
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50 text-gray-900">
+    <!-- Header -->
+    <header class="bg-primary text-white">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <div class="w-10 h-10 bg-accent rounded-lg flex items-center justify-center">
+                        <i class="fas fa-chart-line text-white text-xl"></i>
+                    </div>
+                    <span class="text-xl font-bold">Dreadnaught Capital</span>
+                </div>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#performance" class="hover:text-accent transition">Performance</a>
+                    <a href="#strategy" class="hover:text-accent transition">Strategy</a>
+                    <a href="#team" class="hover:text-accent transition">Team</a>
+                    <a href="#contact" class="hover:text-accent transition">Contact</a>
+                </nav>
+                <button class="md:hidden text-white">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-primary to-secondary text-white py-20">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h1 id="hero-title" class="text-4xl md:text-5xl font-bold mb-6">
+                        <span class="skeleton skeleton-title inline-block w-full">&nbsp;</span>
+                    </h1>
+                    <p id="hero-subtitle" class="text-xl mb-8 text-gray-300">
+                        <span class="skeleton skeleton-text inline-block w-full">&nbsp;</span>
+                        <span class="skeleton skeleton-text inline-block w-3/4">&nbsp;</span>
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#contact" class="bg-accent hover:bg-indigo-700 text-white px-8 py-3 rounded-lg font-medium transition">Request Access</a>
+                        <a href="#performance" class="border border-white hover:bg-white hover:text-primary text-white px-8 py-3 rounded-lg font-medium transition">View Performance</a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <img id="hero-image" src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&h=400&fit=crop" alt="AI analyzing financial markets" class="rounded-lg shadow-xl" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.src='https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&h=400&fit=crop';">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Performance Section -->
+    <section id="performance" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 id="performance-title" class="text-3xl md:text-4xl font-bold mb-4">
+                    <span class="skeleton skeleton-title inline-block mx-auto">&nbsp;</span>
+                </h2>
+                <p id="performance-subtitle" class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    <span class="skeleton skeleton-text inline-block w-full">&nbsp;</span>
+                </p>
+            </div>
+
+            <!-- Performance Cards Container -->
+            <div id="performance-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+                <!-- Loading skeletons for cards -->
+                <div class="performance-card bg-white p-6 rounded-xl shadow-md border border-gray-100 skeleton-card">
+                    <div class="skeleton skeleton-title w-1/2 mb-3">&nbsp;</div>
+                    <div class="skeleton skeleton-text w-3/4">&nbsp;</div>
+                    <div class="skeleton skeleton-text w-1/2">&nbsp;</div>
+                </div>
+                <div class="performance-card bg-white p-6 rounded-xl shadow-md border border-gray-100 skeleton-card">
+                    <div class="skeleton skeleton-title w-1/2 mb-3">&nbsp;</div>
+                    <div class="skeleton skeleton-text w-3/4">&nbsp;</div>
+                    <div class="skeleton skeleton-text w-1/2">&nbsp;</div>
+                </div>
+                <div class="performance-card bg-white p-6 rounded-xl shadow-md border border-gray-100 skeleton-card">
+                    <div class="skeleton skeleton-title w-1/2 mb-3">&nbsp;</div>
+                    <div class="skeleton skeleton-text w-3/4">&nbsp;</div>
+                    <div class="skeleton skeleton-text w-1/2">&nbsp;</div>
+                </div>
+                <div class="performance-card bg-white p-6 rounded-xl shadow-md border border-gray-100 skeleton-card">
+                    <div class="skeleton skeleton-title w-1/2 mb-3">&nbsp;</div>
+                    <div class="skeleton skeleton-text w-3/4">&nbsp;</div>
+                    <div class="skeleton skeleton-text w-1/2">&nbsp;</div>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 p-8 rounded-xl">
+                <h3 class="text-2xl font-bold mb-6">Performance vs. Benchmarks</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white rounded-lg overflow-hidden">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="py-5 px-8 text-left font-semibold text-gray-700 text-xl">Period</th>
+                                <th class="py-5 px-8 text-left font-semibold text-gray-700 text-xl">Dreadnaught</th>
+                                <th class="py-5 px-8 text-left font-semibold text-gray-700 text-xl">S&P 500</th>
+                            </tr>
+                        </thead>
+                        <tbody id="performance-table" class="divide-y divide-gray-200">
+                            <!-- Loading skeleton rows -->
+                            <tr>
+                                <td class="py-5 px-8"><span class="skeleton inline-block w-16 h-7">&nbsp;</span></td>
+                                <td class="py-5 px-8"><span class="skeleton inline-block w-24 h-7">&nbsp;</span></td>
+                                <td class="py-5 px-8"><span class="skeleton inline-block w-24 h-7">&nbsp;</span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-5 px-8"><span class="skeleton inline-block w-16 h-7">&nbsp;</span></td>
+                                <td class="py-5 px-8"><span class="skeleton inline-block w-24 h-7">&nbsp;</span></td>
+                                <td class="py-5 px-8"><span class="skeleton inline-block w-24 h-7">&nbsp;</span></td>
+                            </tr>
+                            <tr>
+                                <td class="py-5 px-8"><span class="skeleton inline-block w-16 h-7">&nbsp;</span></td>
+                                <td class="py-5 px-8"><span class="skeleton inline-block w-24 h-7">&nbsp;</span></td>
+                                <td class="py-5 px-8"><span class="skeleton inline-block w-24 h-7">&nbsp;</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- View Chart Button -->
+                <div class="mt-6 text-center">
+                    <button id="view-chart-btn" onclick="openChartModal()" class="bg-accent hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium transition inline-flex items-center">
+                        <i class="fas fa-chart-line mr-2"></i>
+                        View 2025 Performance Chart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Strategy Section -->
+    <section id="strategy" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 id="strategy-title" class="text-3xl md:text-4xl font-bold mb-4">
+                    <span class="skeleton skeleton-title inline-block mx-auto">&nbsp;</span>
+                </h2>
+                <p id="strategy-subtitle" class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    <span class="skeleton skeleton-text inline-block w-full">&nbsp;</span>
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <div class="mb-8">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-accent bg-opacity-10 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-brain text-accent text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold">Deep Reinforcement Learning</h3>
+                        </div>
+                        <p class="text-gray-700">Our models continuously learn from market microstructure data, adapting to changing conditions in real-time without human intervention.</p>
+                    </div>
+                    <div class="mb-8">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-accent bg-opacity-10 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-project-diagram text-accent text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold">Multi-Factor Framework</h3>
+                        </div>
+                        <p class="text-gray-700">We combine traditional quantitative factors with novel ML-derived signals to identify mispricings across global derivatives markets.</p>
+                    </div>
+                    <div>
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-accent bg-opacity-10 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-shield-alt text-accent text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold">Dynamic Risk Management</h3>
+                        </div>
+                        <p class="text-gray-700">Real-time position sizing and volatility targeting ensure consistent performance through all market environments.</p>
+                    </div>
+                </div>
+                <div>
+                    <img src="https://fastly.picsum.photos/id/366/4000/3000.jpg?hmac=zphhHOH9ofToN2jNHd8z-nc98NrBd8y2okWXEXetLDg" alt="Machine learning strategy visualization" class="rounded-lg shadow-lg" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 id="team-title" class="text-3xl md:text-4xl font-bold mb-4">
+                    <span class="skeleton skeleton-title inline-block mx-auto">&nbsp;</span>
+                </h2>
+                <p id="team-subtitle" class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    <span class="skeleton skeleton-text inline-block w-full">&nbsp;</span>
+                </p>
+            </div>
+
+            <div id="team-cards" class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- Loading skeletons for team cards -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+                    <div class="skeleton w-full h-64">&nbsp;</div>
+                    <div class="p-6">
+                        <div class="skeleton skeleton-text w-1/2 mb-2">&nbsp;</div>
+                        <div class="skeleton skeleton-text w-1/3 mb-4">&nbsp;</div>
+                        <div class="skeleton skeleton-text w-full">&nbsp;</div>
+                        <div class="skeleton skeleton-text w-3/4">&nbsp;</div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+                    <div class="skeleton w-full h-64">&nbsp;</div>
+                    <div class="p-6">
+                        <div class="skeleton skeleton-text w-1/2 mb-2">&nbsp;</div>
+                        <div class="skeleton skeleton-text w-1/3 mb-4">&nbsp;</div>
+                        <div class="skeleton skeleton-text w-full">&nbsp;</div>
+                        <div class="skeleton skeleton-text w-3/4">&nbsp;</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="contact" class="py-20 bg-gradient-to-r from-primary to-secondary text-white">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 id="cta-title" class="text-3xl md:text-4xl font-bold mb-6">
+                    <span class="skeleton skeleton-title inline-block mx-auto">&nbsp;</span>
+                </h2>
+                <p id="cta-subtitle" class="text-xl mb-8 text-gray-300">
+                    <span class="skeleton skeleton-text inline-block w-1/2 mx-auto">&nbsp;</span>
+                </p>
+
+                <form id="investor-form" class="max-w-lg mx-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <input type="text" name="fullName" id="form-name" placeholder="Full Name" required class="px-4 py-3 rounded-lg bg-white bg-opacity-10 border border-gray-300 border-opacity-20 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-white placeholder-gray-400">
+                        <input type="email" name="email" id="form-email" placeholder="Email Address" required class="px-4 py-3 rounded-lg bg-white bg-opacity-10 border border-gray-300 border-opacity-20 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-white placeholder-gray-400">
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <input type="text" name="organization" id="form-org" placeholder="Organization" class="px-4 py-3 rounded-lg bg-white bg-opacity-10 border border-gray-300 border-opacity-20 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-white placeholder-gray-400">
+                        <input type="tel" name="phone" id="form-phone" placeholder="Phone Number" class="px-4 py-3 rounded-lg bg-white bg-opacity-10 border border-gray-300 border-opacity-20 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-white placeholder-gray-400">
+                    </div>
+                    <button type="submit" id="form-submit" class="bg-accent hover:bg-indigo-700 text-white px-8 py-4 rounded-lg font-medium transition w-full md:w-auto">
+                        <span id="submit-text">Request Investor Package</span>
+                        <span id="submit-loading" class="hidden">
+                            <i class="fas fa-spinner fa-spin mr-2"></i>Submitting...
+                        </span>
+                    </button>
+                    <!-- Form Messages -->
+                    <div id="form-success" class="hidden mt-4 p-4 bg-green-500 bg-opacity-20 border border-green-400 rounded-lg text-green-200">
+                        <i class="fas fa-check-circle mr-2"></i>
+                        <span>Thank you! We'll be in touch shortly with your investor package.</span>
+                    </div>
+                    <div id="form-error" class="hidden mt-4 p-4 bg-red-500 bg-opacity-20 border border-red-400 rounded-lg text-red-200">
+                        <i class="fas fa-exclamation-circle mr-2"></i>
+                        <span id="form-error-message">Something went wrong. Please try again or email us directly.</span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-10 h-10 bg-accent rounded-lg flex items-center justify-center">
+                            <i class="fas fa-chart-line text-white text-xl"></i>
+                        </div>
+                        <span class="text-xl font-bold text-white">Dreadnaught</span>
+                    </div>
+                    <p class="mb-4">AI-powered hedge fund delivering superior risk-adjusted returns.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-4">Navigation</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#performance" class="hover:text-white transition">Performance</a></li>
+                        <li><a href="#strategy" class="hover:text-white transition">Strategy</a></li>
+                        <li><a href="#team" class="hover:text-white transition">Team</a></li>
+                        <li><a href="#contact" class="hover:text-white transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-4">Legal</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition">Disclosures</a></li>
+                        <li><a href="#" class="hover:text-white transition">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-white transition">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-4">Contact</h3>
+                    <address class="not-italic">
+                        <p class="mb-2">3705 Fortuna Ranch Rd</p>
+                        <p class="mb-2">Encinitas, CA 92024</p>
+                        <p class="mb-2">info@dreadnaughtcapital.com</p>
+                        <p>+1 (760) 555-0100</p>
+                    </address>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-12 pt-8 text-sm text-center">
+                <p>&copy; 2024 Dreadnaught Capital. All rights reserved.</p>
+                <p class="mt-2">Past performance is not indicative of future results.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chart Modal -->
+    <div id="chart-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black bg-opacity-50" onclick="closeChartModal()"></div>
+        <div class="absolute inset-4 md:inset-10 lg:inset-20 bg-white rounded-xl shadow-2xl flex flex-col">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 class="text-xl font-bold">Performance Chart</h3>
+                <button onclick="closeChartModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
+            <div class="flex-1 p-4">
+                <iframe id="chart-iframe" src="" class="w-full h-full border-0 rounded-lg"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Banner (hidden by default) -->
+    <div id="error-banner" class="fixed top-0 left-0 right-0 z-50 hidden">
+        <div class="container mx-auto px-6 py-4">
+            <div class="error-banner flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-exclamation-triangle mr-3"></i>
+                    <span id="error-message">Failed to load data. Showing fallback content.</span>
+                </div>
+                <button onclick="document.getElementById('error-banner').classList.add('hidden')" class="text-red-700 hover:text-red-900">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =====================================================
+        // CONFIGURATION - Update SHEET_ID with your Google Sheet ID
+        // =====================================================
+        const CONFIG = {
+            // Replace with your published Google Sheet ID
+            // To get this: Open your Google Sheet > File > Share > Publish to web
+            // The ID is in the URL: https://docs.google.com/spreadsheets/d/{SHEET_ID}/...
+            SHEET_ID: '1Jx_WMUuQXLtBpExe-mInRAlYQUSg3_rtbVS1leUu36E',
+
+            // Google Apps Script Web App URL for form submissions
+            // To set this up:
+            // 1. Open your Google Sheet > Extensions > Apps Script
+            // 2. Paste the form handler code (see comments below)
+            // 3. Deploy > New deployment > Web app
+            // 4. Set "Execute as" to yourself, "Who has access" to "Anyone"
+            // 5. Copy the Web App URL here
+            FORM_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbylAM4JsGxCkf3oQL1onC6eeT_EtlQhAMzNhdijQSiCScYTBWh1kvw3ndEgL0ZGfRTW/exec',
+
+            // Sheet names - must match exactly with your Google Sheet tab names
+            SHEETS: {
+                performance: 'Performance',
+                performanceTable: 'TableData',
+                team: 'Team',
+                content: 'Content'
+            },
+
+            // Enable to use fallback data when Google Sheets fails (for development/testing)
+            USE_FALLBACK_ON_ERROR: true
+        };
+
+        // =====================================================
+        // FALLBACK DATA - Used when Google Sheets is unavailable
+        // =====================================================
+        const FALLBACK_DATA = {
+            performance: [
+                { metric_id: 'ytd_return', value: '+12.3%', title: '2025 YTD Return', subtitle: 'Outperforming S&P 500 by 16.4%', bar_width: 'w-full' },
+                { metric_id: 'sortino', value: '1.2 - 6.7', title: 'Sortino Ratio', subtitle: 'Superior risk-adjusted returns', bar_width: 'w-3/4' },
+                { metric_id: 'bear_market', value: '317%', title: 'Bear Market Performance', subtitle: 'During 2022 bear market', bar_width: 'w-5/6' }
+            ],
+            performanceTable: [
+                { period: 'YTD', dreadnaught: '+12.3%', dreadnaught_positive: true, sp500: '-3.7%', sp500_positive: false, nasdaq: '-7.6%', nasdaq_positive: false },
+                { period: '2025', dreadnaught: '+69.7%', dreadnaught_positive: true, sp500: '+23.3%', sp500_positive: true, nasdaq: '+28.7%', nasdaq_positive: true },
+                { period: '2024', dreadnaught: '+69.7%', dreadnaught_positive: true, sp500: '+23.3%', sp500_positive: true, nasdaq: '+28.7%', nasdaq_positive: true },
+                { period: '2023', dreadnaught: '+59.6%', dreadnaught_positive: true, sp500: '+24.3%', sp500_positive: true, nasdaq: '+43.3%', nasdaq_positive: true },
+                { period: '2022', dreadnaught: '+317%', dreadnaught_positive: true, sp500: '-20.0%', sp500_positive: false, nasdaq: '-33.5%', nasdaq_positive: false }
+            ],
+            team: [
+                { name: 'Dr. Sarah Chen', title: 'Chief Investment Officer', bio: 'Former Head of Quantitative Strategies at Citadel, PhD in Machine Learning from Stanford.', image_url: 'https://picsum.photos/400/300?random=3' },
+                { name: 'Mark P. Long', title: 'Head of Derivatives Trading', bio: '15+ years experience trading exotic derivatives at Goldman Sachs and Bridgewater.', image_url: 'https://picsum.photos/400/300?random=4' }
+            ],
+            content: {
+                hero_title: 'AI-Powered Alpha in Any Market',
+                hero_subtitle: 'Our machine learning algorithms systematically identify and exploit inefficiencies in global derivatives markets, delivering uncorrelated returns regardless of market direction.',
+                hero_image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&h=400&fit=crop',
+                performance_title: 'Exceptional Risk-Adjusted Returns',
+                performance_subtitle: 'Our proprietary ML models have consistently outperformed traditional hedge fund strategies across all market regimes.',
+                strategy_title: 'Proprietary Machine Learning Strategy',
+                strategy_subtitle: 'Our quantitative approach combines cutting-edge AI with deep derivatives expertise.',
+                team_title: 'World-Class Team',
+                team_subtitle: 'Combining decades of hedge fund experience with cutting-edge machine learning expertise.',
+                cta_title: 'Ready to Invest with Dreadnaught?',
+                cta_subtitle: 'Minimum investment: $250,000. Limited capacity available.',
+                performance_chart: '' // Add your Google Sheets chart URL here
+            }
+        };
+
+        // =====================================================
+        // DATA FETCHING - Google Sheets API
+        // =====================================================
+
+        /**
+         * Fetches data from a Google Sheet tab
+         * Uses the public visualization API (no API key required)
+         * Sheet must be published to web: File > Share > Publish to web
+         */
+        async function fetchSheetData(sheetName) {
+            const url = `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch ${sheetName}: ${response.status}`);
+            }
+
+            const text = await response.text();
+
+            // Google returns JSONP-like response, need to extract JSON
+            // Format: google.visualization.Query.setResponse({...})
+            const jsonMatch = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);?$/);
+            if (!jsonMatch) {
+                throw new Error(`Invalid response format from ${sheetName}`);
+            }
+
+            const data = JSON.parse(jsonMatch[1]);
+
+            if (data.status === 'error') {
+                throw new Error(data.errors?.[0]?.message || 'Unknown error');
+            }
+
+            return parseSheetData(data.table);
+        }
+
+        /**
+         * Parses Google Sheets visualization API response into array of objects
+         */
+        function parseSheetData(table) {
+            if (!table || !table.cols || !table.rows || !table.rows.length) {
+                return [];
+            }
+
+            // Check if headers are in the cols labels
+            let headers = table.cols.map(col => (col.label || '').toLowerCase().trim());
+            let dataRows = table.rows;
+
+            // If no labels, check if first row looks like headers
+            const hasLabels = headers.some(h => h && h.length > 0);
+            if (!hasLabels && table.rows.length > 0) {
+                // Use first row as headers
+                const firstRow = table.rows[0];
+                headers = firstRow.c.map(cell => {
+                    const val = cell ? (cell.v || '') : '';
+                    return String(val).toLowerCase().trim();
+                });
+                // Skip first row in data
+                dataRows = table.rows.slice(1);
+            }
+
+            // Convert rows to objects
+            return dataRows.map(row => {
+                const obj = {};
+                row.c.forEach((cell, index) => {
+                    const header = headers[index];
+                    if (header) {
+                        // Prefer formatted value (f) for display, fall back to raw value (v)
+                        let value = cell ? (cell.f !== undefined && cell.f !== null ? cell.f : cell.v) : '';
+                        if (value === null || value === undefined) value = '';
+
+                        // Clean up string values - remove surrounding quotes
+                        if (typeof value === 'string') {
+                            value = value.replace(/^["']|["']$/g, '').trim();
+                        }
+
+                        obj[header] = value;
+
+                        // Convert string "true"/"false" to boolean
+                        if (obj[header] === 'true') obj[header] = true;
+                        if (obj[header] === 'false') obj[header] = false;
+                    }
+                });
+                return obj;
+            });
+        }
+
+        /**
+         * Normalizes data objects to handle different column naming conventions
+         */
+        function normalizePerformanceData(data) {
+            return data.map(row => ({
+                metric_id: row.metric_id || row.metric || row.id || '',
+                value: row.value || '',
+                title: row.title || '',
+                subtitle: (row.subtitle === 'None' || row.subtitle === 'none') ? '' : (row.subtitle || ''),
+                bar_width: row.bar_width || row.width || 'w-full'
+            }));
+        }
+
+        function normalizeTableData(data) {
+            return data.map(row => ({
+                period: row.period || '',
+                dreadnaught: row.dreadnaught || row.fund || '',
+                dreadnaught_positive: row.dreadnaught_positive ?? row.fund_positive ?? !String(row.dreadnaught || row.fund || '').includes('-'),
+                sp500: row.sp500 || row['s&p500'] || row['s&p 500'] || '',
+                sp500_positive: row.sp500_positive ?? !String(row.sp500 || row['s&p500'] || '').includes('-'),
+                nasdaq: row.nasdaq || '',
+                nasdaq_positive: row.nasdaq_positive ?? !String(row.nasdaq || '').includes('-')
+            }));
+        }
+
+        function normalizeTeamData(data) {
+            return data.map(row => ({
+                name: row.name || '',
+                title: row.title || row.role || row.position || '',
+                bio: row.bio || row.biography || row.description || '',
+                image_url: row.image_url || row.image || row.photo || row.photo_url || 'https://picsum.photos/400/300'
+            }));
+        }
+
+        function normalizeContentData(data) {
+            const obj = {};
+            data.forEach(row => {
+                const key = row.content_id || row.id || row.key || '';
+                const value = row.value || row.content || row.text || '';
+                if (key) {
+                    // Clean up the key - remove quotes, normalize
+                    const cleanKey = key.replace(/^["']|["']$/g, '').trim();
+                    obj[cleanKey] = value.replace(/^["']|["']$/g, '').trim();
+                }
+            });
+            return obj;
+        }
+
+
+        // =====================================================
+        // RENDER FUNCTIONS
+        // =====================================================
+
+        /**
+         * Renders the three performance metric cards
+         */
+        function renderPerformanceCards(performanceData) {
+            const container = document.getElementById('performance-cards');
+            if (!container || !performanceData?.length) return;
+
+            container.innerHTML = performanceData.map(card => `
+                <div class="performance-card bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                    <div class="text-3xl lg:text-4xl font-bold text-accent mb-3">${escapeHtml(card.value)}</div>
+                    <h3 class="text-lg font-semibold mb-1">${escapeHtml(card.title)}</h3>
+                    <p class="text-gray-600 text-sm">${escapeHtml(card.subtitle)}</p>
+                    <div class="mt-3">
+                        <div class="performance-chart ${escapeHtml(card.bar_width || 'w-full')}"></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        /**
+         * Renders the performance comparison table
+         */
+        function renderPerformanceTable(tableData) {
+            const container = document.getElementById('performance-table');
+            if (!container || !tableData?.length) return;
+
+            container.innerHTML = tableData.map(row => `
+                <tr>
+                    <td class="py-5 px-8 text-xl">${escapeHtml(row.period)}</td>
+                    <td class="py-5 px-8 text-xl font-medium ${row.dreadnaught_positive ? 'text-green-600' : 'text-red-600'}">${escapeHtml(row.dreadnaught)}</td>
+                    <td class="py-5 px-8 text-xl ${row.sp500_positive ? 'text-green-600' : 'text-red-600'}">${escapeHtml(row.sp500)}</td>
+                </tr>
+            `).join('');
+        }
+
+        /**
+         * Renders the team member cards
+         */
+        function renderTeam(teamData) {
+            const container = document.getElementById('team-cards');
+            if (!container || !teamData?.length) return;
+
+            container.innerHTML = teamData.map(member => `
+                <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+                    <img src="${escapeHtml(member.image_url)}" alt="${escapeHtml(member.name)}" class="w-full h-64 object-cover" loading="lazy">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-1">${escapeHtml(member.name)}</h3>
+                        <p class="text-accent font-medium mb-4">${escapeHtml(member.title)}</p>
+                        <p class="text-gray-600">${escapeHtml(member.bio)}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        /**
+         * Renders text content throughout the page
+         */
+        function renderContent(contentData) {
+            if (!contentData) return;
+
+            // Map of element IDs to content keys
+            const contentMap = {
+                'hero-title': 'hero_title',
+                'hero-subtitle': 'hero_subtitle',
+                'performance-title': 'performance_title',
+                'performance-subtitle': 'performance_subtitle',
+                'strategy-title': 'strategy_title',
+                'strategy-subtitle': 'strategy_subtitle',
+                'team-title': 'team_title',
+                'team-subtitle': 'team_subtitle',
+                'cta-title': 'cta_title',
+                'cta-subtitle': 'cta_subtitle'
+            };
+
+            Object.entries(contentMap).forEach(([elementId, contentKey]) => {
+                const element = document.getElementById(elementId);
+                if (element && contentData[contentKey]) {
+                    element.textContent = contentData[contentKey];
+                }
+            });
+
+            // Handle hero image separately
+            if (contentData.hero_image) {
+                const heroImage = document.getElementById('hero-image');
+                if (heroImage) {
+                    const imageUrl = convertToDirectImageUrl(contentData.hero_image);
+                    console.log('Setting hero image:', contentData.hero_image, '→', imageUrl);
+                    heroImage.src = imageUrl;
+                }
+            }
+
+            // Handle performance chart URL
+            if (contentData.performance_chart) {
+                chartUrl = contentData.performance_chart;
+                console.log('Chart URL set:', chartUrl);
+            }
+        }
+
+        /**
+         * Helper function to escape HTML and prevent XSS
+         */
+        function escapeHtml(text) {
+            if (text === null || text === undefined) return '';
+            const div = document.createElement('div');
+            div.textContent = String(text);
+            return div.innerHTML;
+        }
+
+        /**
+         * Converts various image sharing URLs to direct image URLs
+         * Handles Google Drive, Dropbox, GitHub, etc.
+         */
+        function convertToDirectImageUrl(url) {
+            if (!url) return url;
+
+            // GitHub: convert blob URL to raw URL
+            // From: https://github.com/user/repo/blob/main/image.png
+            // To: https://raw.githubusercontent.com/user/repo/main/image.png
+            if (url.includes('github.com') && url.includes('/blob/')) {
+                return url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
+            }
+
+            // Google Drive: convert sharing URL to direct URL
+            // From: https://drive.google.com/file/d/FILE_ID/view?usp=sharing
+            // To: https://drive.google.com/uc?export=view&id=FILE_ID
+            const driveMatch = url.match(/drive\.google\.com\/file\/d\/([^\/]+)/);
+            if (driveMatch) {
+                return `https://drive.google.com/uc?export=view&id=${driveMatch[1]}`;
+            }
+
+            // Dropbox: convert to direct link
+            // From: https://www.dropbox.com/s/xxx/file.png?dl=0
+            // To: https://www.dropbox.com/s/xxx/file.png?raw=1
+            if (url.includes('dropbox.com')) {
+                return url.replace('?dl=0', '?raw=1').replace('www.dropbox.com', 'dl.dropboxusercontent.com');
+            }
+
+            return url;
+        }
+
+        // =====================================================
+        // ERROR HANDLING
+        // =====================================================
+
+        /**
+         * Shows error banner at top of page
+         */
+        function showError(message) {
+            const banner = document.getElementById('error-banner');
+            const messageEl = document.getElementById('error-message');
+            if (banner && messageEl) {
+                messageEl.textContent = message;
+                banner.classList.remove('hidden');
+            }
+            console.error('Data loading error:', message);
+        }
+
+        /**
+         * Renders all sections with fallback data
+         */
+        function renderFallback() {
+            console.log('Using fallback data');
+            renderPerformanceCards(FALLBACK_DATA.performance);
+            renderPerformanceTable(FALLBACK_DATA.performanceTable);
+            renderTeam(FALLBACK_DATA.team);
+            renderContent(FALLBACK_DATA.content);
+        }
+
+        // =====================================================
+        // INITIALIZATION
+        // =====================================================
+
+        /**
+         * Main initialization function
+         * Fetches all data and renders the page
+         * Uses Promise.allSettled for graceful partial failures
+         */
+        async function init() {
+            // Check if using placeholder Sheet ID
+            if (CONFIG.SHEET_ID === 'YOUR_GOOGLE_SHEET_ID') {
+                console.log('No Google Sheet ID configured. Using fallback data.');
+                console.log('To use Google Sheets:');
+                console.log('1. Create a Google Sheet with tabs: Performance, PerformanceTable, Team, Content');
+                console.log('2. Publish the sheet: File > Share > Publish to web');
+                console.log('3. Copy the Sheet ID from the URL');
+                console.log('4. Update CONFIG.SHEET_ID in this file');
+                renderFallback();
+                return;
+            }
+
+            // Fetch all sheets independently - partial success is OK
+            const results = await Promise.allSettled([
+                fetchSheetData(CONFIG.SHEETS.performance),
+                fetchSheetData(CONFIG.SHEETS.performanceTable),
+                fetchSheetData(CONFIG.SHEETS.team),
+                fetchSheetData(CONFIG.SHEETS.content)
+            ]);
+
+            const sheetNames = ['Performance', 'PerformanceTable', 'Team', 'Content'];
+            let hasErrors = false;
+            let successCount = 0;
+
+            // Log results for each sheet
+            results.forEach((result, index) => {
+                if (result.status === 'fulfilled') {
+                    console.log(`✓ ${sheetNames[index]}: Loaded ${result.value.length} rows`);
+                    successCount++;
+                } else {
+                    console.error(`✗ ${sheetNames[index]}: ${result.reason}`);
+                    hasErrors = true;
+                }
+            });
+
+            // Extract and normalize data (use fallback for failed sheets)
+            const performanceData = results[0].status === 'fulfilled'
+                ? normalizePerformanceData(results[0].value)
+                : FALLBACK_DATA.performance;
+            const tableData = results[1].status === 'fulfilled'
+                ? normalizeTableData(results[1].value)
+                : FALLBACK_DATA.performanceTable;
+            const teamData = results[2].status === 'fulfilled'
+                ? normalizeTeamData(results[2].value)
+                : FALLBACK_DATA.team;
+            const contentData = results[3].status === 'fulfilled'
+                ? normalizeContentData(results[3].value)
+                : FALLBACK_DATA.content;
+
+            console.log('Content raw data:', results[3].status === 'fulfilled' ? results[3].value : 'FAILED');
+            console.log('Content normalized:', contentData);
+
+            // Render all sections
+            renderPerformanceCards(performanceData);
+            renderPerformanceTable(tableData);
+            renderTeam(teamData);
+            renderContent(contentData);
+
+            // Show status
+            if (hasErrors) {
+                // Build detailed error message
+                const errorDetails = results.map((r, i) =>
+                    r.status === 'rejected' ? `${sheetNames[i]}: ${r.reason}` : null
+                ).filter(Boolean).join(' | ');
+
+                if (successCount === 0) {
+                    showError(`Failed to load live data. ${errorDetails}`);
+                } else {
+                    showError(`Loaded ${successCount}/4 sheets. Errors: ${errorDetails}`);
+                }
+                console.log('Check that:');
+                console.log('1. Sheet is published: File > Share > Publish to web > Entire document');
+                console.log('2. Sheet tab names match exactly: Performance, PerformanceTable, Team, Content');
+                console.log('3. First row contains column headers');
+            } else {
+                console.log('All data loaded successfully from Google Sheets');
+            }
+        }
+
+        // =====================================================
+        // CHART MODAL
+        // =====================================================
+
+        let chartUrl = ''; // Will be set from Content sheet
+
+        function openChartModal() {
+            const modal = document.getElementById('chart-modal');
+            const iframe = document.getElementById('chart-iframe');
+
+            if (!chartUrl) {
+                alert('Chart URL not configured. Add "performance_chart" to your Content sheet.');
+                return;
+            }
+
+            iframe.src = chartUrl;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        }
+
+        function closeChartModal() {
+            const modal = document.getElementById('chart-modal');
+            const iframe = document.getElementById('chart-iframe');
+
+            modal.classList.add('hidden');
+            iframe.src = ''; // Stop loading/playing
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeChartModal();
+        });
+
+        // =====================================================
+        // FORM SUBMISSION
+        // =====================================================
+
+        /**
+         * Handles investor form submission
+         * Sends data to Google Apps Script which writes to Google Sheets
+         */
+        function setupFormHandler() {
+            const form = document.getElementById('investor-form');
+            if (!form) return;
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                // Get form elements
+                const submitBtn = document.getElementById('form-submit');
+                const submitText = document.getElementById('submit-text');
+                const submitLoading = document.getElementById('submit-loading');
+                const successMsg = document.getElementById('form-success');
+                const errorMsg = document.getElementById('form-error');
+                const errorText = document.getElementById('form-error-message');
+
+                // Hide previous messages
+                successMsg.classList.add('hidden');
+                errorMsg.classList.add('hidden');
+
+                // Get form data
+                const formData = {
+                    fullName: document.getElementById('form-name').value.trim(),
+                    email: document.getElementById('form-email').value.trim(),
+                    organization: document.getElementById('form-org').value.trim(),
+                    phone: document.getElementById('form-phone').value.trim(),
+                    timestamp: new Date().toISOString(),
+                    source: window.location.href
+                };
+
+                // Validate required fields
+                if (!formData.fullName || !formData.email) {
+                    errorText.textContent = 'Please fill in all required fields.';
+                    errorMsg.classList.remove('hidden');
+                    return;
+                }
+
+                // Validate email format
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(formData.email)) {
+                    errorText.textContent = 'Please enter a valid email address.';
+                    errorMsg.classList.remove('hidden');
+                    return;
+                }
+
+                // Show loading state
+                submitBtn.disabled = true;
+                submitText.classList.add('hidden');
+                submitLoading.classList.remove('hidden');
+
+                try {
+                    // Check if Apps Script URL is configured
+                    if (CONFIG.FORM_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL') {
+                        // Demo mode - log to console and show success
+                        console.log('Form submission (demo mode):', formData);
+                        console.log('To enable real submissions, set up Google Apps Script:');
+                        console.log('1. Open Google Sheet > Extensions > Apps Script');
+                        console.log('2. Add the form handler code (see APPS_SCRIPT_CODE below)');
+                        console.log('3. Deploy as Web App and update CONFIG.FORM_SCRIPT_URL');
+
+                        // Simulate success for demo
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        form.reset();
+                        successMsg.classList.remove('hidden');
+                        return;
+                    }
+
+                    // Submit to Google Apps Script
+                    const response = await fetch(CONFIG.FORM_SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors', // Required for Apps Script
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData)
+                    });
+
+                    // With no-cors mode, we can't read the response
+                    // but if we get here without error, assume success
+                    form.reset();
+                    successMsg.classList.remove('hidden');
+                    console.log('Form submitted successfully');
+
+                } catch (error) {
+                    console.error('Form submission error:', error);
+                    errorText.textContent = 'Something went wrong. Please try again or email us directly at info@dreadnaughtcapital.com';
+                    errorMsg.classList.remove('hidden');
+                } finally {
+                    // Reset button state
+                    submitBtn.disabled = false;
+                    submitText.classList.remove('hidden');
+                    submitLoading.classList.add('hidden');
+                }
+            });
+        }
+
+        /*
+         * =====================================================
+         * GOOGLE APPS SCRIPT CODE FOR FORM HANDLER
+         * =====================================================
+         *
+         * Copy this code to your Google Apps Script:
+         * (Google Sheet > Extensions > Apps Script)
+         *
+         * ---------------------------------------------------
+
+function doPost(e) {
+  try {
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Submissions');
+
+    // Create sheet if it doesn't exist
+    if (!sheet) {
+      const newSheet = SpreadsheetApp.getActiveSpreadsheet().insertSheet('Submissions');
+      newSheet.appendRow(['Timestamp', 'Full Name', 'Email', 'Organization', 'Phone', 'Source', 'Submitted At']);
+    }
+
+    const data = JSON.parse(e.postData.contents);
+
+    const targetSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Submissions');
+    targetSheet.appendRow([
+      new Date(),
+      data.fullName || '',
+      data.email || '',
+      data.organization || '',
+      data.phone || '',
+      data.source || '',
+      data.timestamp || ''
+    ]);
+
+    return ContentService.createTextOutput(JSON.stringify({success: true}))
+      .setMimeType(ContentService.MimeType.JSON);
+
+  } catch (error) {
+    return ContentService.createTextOutput(JSON.stringify({success: false, error: error.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function doGet(e) {
+  return ContentService.createTextOutput('Form handler is active');
+}
+
+         * ---------------------------------------------------
+         *
+         * After pasting, click Deploy > New deployment > Web app
+         * Set "Execute as" to your account
+         * Set "Who has access" to "Anyone"
+         * Copy the URL and update CONFIG.FORM_SCRIPT_URL
+         */
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            init();
+            setupFormHandler();
+        });
+    </script>
+</body>
+</html>
