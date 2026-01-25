@@ -439,7 +439,10 @@
             },
 
             // Enable to use fallback data when Google Sheets fails (for development/testing)
-            USE_FALLBACK_ON_ERROR: true
+            USE_FALLBACK_ON_ERROR: true,
+
+            // Visit tracking: set to false to disable
+            TRACK_VISITS: true
         };
 
         // =====================================================
@@ -1208,15 +1211,36 @@ function doGet(e) {
         // VISIT TRACKING
         // =====================================================
 
-        function trackVisit() {
+        async function trackVisit() {
+            // Check if tracking is enabled
+            if (!CONFIG.TRACK_VISITS) return;
+
             // Don't track if no script URL configured
             if (CONFIG.FORM_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL') return;
+
+            // Get location from IP (free service, no API key needed)
+            let location = 'Unknown';
+            let ip = '';
+            try {
+                const geoResponse = await fetch('https://ipwho.is/');
+                if (geoResponse.ok) {
+                    const geoData = await geoResponse.json();
+                    if (geoData.success) {
+                        location = [geoData.city, geoData.region, geoData.country].filter(Boolean).join(', ');
+                        ip = geoData.ip || '';
+                    }
+                }
+            } catch (e) {
+                console.log('Geo lookup failed:', e);
+            }
 
             const visitData = {
                 type: 'visit',
                 timestamp: new Date().toISOString(),
                 page: window.location.href,
                 referrer: document.referrer || 'direct',
+                location: location,
+                ip: ip,
                 userAgent: navigator.userAgent,
                 screenSize: `${window.screen.width}x${window.screen.height}`,
                 language: navigator.language
