@@ -163,11 +163,12 @@
             <div class="bg-gray-50 p-8 rounded-xl">
                 <h3 class="text-2xl font-bold mb-6">Performance vs. Benchmarks</h3>
                 <div class="overflow-x-auto">
-                    <table class="min-w-full bg-white rounded-lg overflow-hidden">
+                    <table class="min-w-full bg-white rounded-lg overflow-hidden table-fixed">
                         <thead class="bg-gray-100">
                             <tr>
                                 <th class="py-5 px-8 text-left font-semibold text-gray-700 text-xl">Period</th>
                                 <th class="py-5 px-8 text-left font-semibold text-gray-700 text-xl">Dreadnaught</th>
+                                <th class="py-5 px-8 text-left font-semibold text-gray-700 text-xl">Sortino</th>
                                 <th class="py-5 px-8 text-left font-semibold text-gray-700 text-xl">S&P 500</th>
                             </tr>
                         </thead>
@@ -176,16 +177,19 @@
                             <tr>
                                 <td class="py-5 px-8"><span class="skeleton inline-block w-16 h-7">&nbsp;</span></td>
                                 <td class="py-5 px-8"><span class="skeleton inline-block w-24 h-7">&nbsp;</span></td>
+                                <td class="py-5 px-8"><span class="skeleton inline-block w-16 h-7">&nbsp;</span></td>
                                 <td class="py-5 px-8"><span class="skeleton inline-block w-24 h-7">&nbsp;</span></td>
                             </tr>
                             <tr>
                                 <td class="py-5 px-8"><span class="skeleton inline-block w-16 h-7">&nbsp;</span></td>
                                 <td class="py-5 px-8"><span class="skeleton inline-block w-24 h-7">&nbsp;</span></td>
+                                <td class="py-5 px-8"><span class="skeleton inline-block w-16 h-7">&nbsp;</span></td>
                                 <td class="py-5 px-8"><span class="skeleton inline-block w-24 h-7">&nbsp;</span></td>
                             </tr>
                             <tr>
                                 <td class="py-5 px-8"><span class="skeleton inline-block w-16 h-7">&nbsp;</span></td>
                                 <td class="py-5 px-8"><span class="skeleton inline-block w-24 h-7">&nbsp;</span></td>
+                                <td class="py-5 px-8"><span class="skeleton inline-block w-16 h-7">&nbsp;</span></td>
                                 <td class="py-5 px-8"><span class="skeleton inline-block w-24 h-7">&nbsp;</span></td>
                             </tr>
                         </tbody>
@@ -455,11 +459,11 @@
                 { metric_id: 'bear_market', value: '317%', title: 'Bear Market Performance', subtitle: 'During 2022 bear market', bar_width: 'w-5/6' }
             ],
             performanceTable: [
-                { period: 'YTD', dreadnaught: '+12.3%', dreadnaught_positive: true, sp500: '-3.7%', sp500_positive: false, nasdaq: '-7.6%', nasdaq_positive: false },
-                { period: '2025', dreadnaught: '+69.7%', dreadnaught_positive: true, sp500: '+23.3%', sp500_positive: true, nasdaq: '+28.7%', nasdaq_positive: true },
-                { period: '2024', dreadnaught: '+69.7%', dreadnaught_positive: true, sp500: '+23.3%', sp500_positive: true, nasdaq: '+28.7%', nasdaq_positive: true },
-                { period: '2023', dreadnaught: '+59.6%', dreadnaught_positive: true, sp500: '+24.3%', sp500_positive: true, nasdaq: '+43.3%', nasdaq_positive: true },
-                { period: '2022', dreadnaught: '+317%', dreadnaught_positive: true, sp500: '-20.0%', sp500_positive: false, nasdaq: '-33.5%', nasdaq_positive: false }
+                { period: 'YTD', dreadnaught: '+12.3%', dreadnaught_positive: true, sp500: '-3.7%', sp500_positive: false, nasdaq: '-7.6%', nasdaq_positive: false, sortino: '-0.22' },
+                { period: '2025', dreadnaught: '+69.7%', dreadnaught_positive: true, sp500: '+23.3%', sp500_positive: true, nasdaq: '+28.7%', nasdaq_positive: true, sortino: '2.01' },
+                { period: '2024', dreadnaught: '+69.7%', dreadnaught_positive: true, sp500: '+23.3%', sp500_positive: true, nasdaq: '+28.7%', nasdaq_positive: true, sortino: '1.70' },
+                { period: '2023', dreadnaught: '+59.6%', dreadnaught_positive: true, sp500: '+24.3%', sp500_positive: true, nasdaq: '+43.3%', nasdaq_positive: true, sortino: '1.38' },
+                { period: '2022', dreadnaught: '+317%', dreadnaught_positive: true, sp500: '-20.0%', sp500_positive: false, nasdaq: '-33.5%', nasdaq_positive: false, sortino: '3.34' }
             ],
             team: [
                 { name: 'Dr. Sarah Chen', title: 'Chief Investment Officer', bio: 'Former Head of Quantitative Strategies at Citadel, PhD in Machine Learning from Stanford.', image_url: 'https://picsum.photos/400/300?random=3' },
@@ -476,7 +480,7 @@
                 team_title: 'World-Class Team',
                 team_subtitle: 'Combining decades of hedge fund experience with cutting-edge machine learning expertise.',
                 cta_title: 'Ready to Invest with Dreadnaught?',
-                cta_subtitle: 'Minimum investment: $100,000. ',
+                cta_subtitle: 'Minimum investment: $100,000. Limited capacity available.',
                 performance_chart: '' // Add your Google Sheets chart URL here
             }
         };
@@ -588,7 +592,8 @@
                 sp500: row.sp500 || row['s&p500'] || row['s&p 500'] || '',
                 sp500_positive: row.sp500_positive ?? !String(row.sp500 || row['s&p500'] || '').includes('-'),
                 nasdaq: row.nasdaq || '',
-                nasdaq_positive: row.nasdaq_positive ?? !String(row.nasdaq || '').includes('-')
+                nasdaq_positive: row.nasdaq_positive ?? !String(row.nasdaq || '').includes('-'),
+                sortino: row.sortino || ''
             }));
         }
 
@@ -650,6 +655,7 @@
                 <tr>
                     <td class="py-5 px-8 text-xl">${escapeHtml(row.period)}</td>
                     <td class="py-5 px-8 text-xl font-medium ${row.dreadnaught_positive ? 'text-green-600' : 'text-red-600'}">${escapeHtml(row.dreadnaught)}</td>
+                    <td class="py-5 px-8 text-xl font-medium text-gray-700">${escapeHtml(row.sortino)}</td>
                     <td class="py-5 px-8 text-xl ${row.sp500_positive ? 'text-green-600' : 'text-red-600'}">${escapeHtml(row.sp500)}</td>
                 </tr>
             `).join('');
