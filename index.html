@@ -1228,13 +1228,11 @@ function doGet(e) {
             let location = 'Unknown';
             let ip = '';
             try {
-                const geoResponse = await fetch('https://ipwho.is/');
+                const geoResponse = await fetch('https://free.freeipapi.com/api/json');
                 if (geoResponse.ok) {
                     const geoData = await geoResponse.json();
-                    if (geoData.success) {
-                        location = [geoData.city, geoData.region, geoData.country].filter(Boolean).join(', ');
-                        ip = geoData.ip || '';
-                    }
+                    location = [geoData.cityName, geoData.regionName, geoData.countryName].filter(Boolean).join(', ');
+                    ip = geoData.ipAddress || '';
                 }
             } catch (e) {
                 console.log('Geo lookup failed:', e);
